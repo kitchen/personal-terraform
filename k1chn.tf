@@ -21,9 +21,46 @@ resource "aws_route53_record" "k1chn-com-a" {
   zone_id = aws_route53_zone.k1chn-com.zone_id
   name    = "."
   type    = "A"
-  ttl     = 300
-  records = ["75.119.217.253"]
+  alias {
+    name                   = aws_cloudfront_distribution.k1chn-com.domain_name
+    zone_id                = aws_cloudfront_distribution.k1chn-com.hosted_zone_id
+    evaluate_target_health = false
+  }
 }
+
+resource "aws_route53_record" "k1chn-com-aaaa" {
+  zone_id = aws_route53_zone.k1chn-com.zone_id
+  name    = "."
+  type    = "AAAA"
+  alias {
+    name                   = aws_cloudfront_distribution.k1chn-com.domain_name
+    zone_id                = aws_cloudfront_distribution.k1chn-com.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "www-k1chn-com-a" {
+  zone_id = aws_route53_zone.k1chn-com.zone_id
+  name    = "www"
+  type    = "A"
+  alias {
+    name                   = aws_cloudfront_distribution.k1chn-com.domain_name
+    zone_id                = aws_cloudfront_distribution.k1chn-com.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "www-k1chn-com-aaaa" {
+  zone_id = aws_route53_zone.k1chn-com.zone_id
+  name    = "www"
+  type    = "AAAA"
+  alias {
+    name                   = aws_cloudfront_distribution.k1chn-com.domain_name
+    zone_id                = aws_cloudfront_distribution.k1chn-com.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
 
 resource "aws_route53_record" "k1chn-com-google" {
   zone_id = aws_route53_zone.k1chn-com.zone_id
@@ -39,14 +76,6 @@ resource "aws_route53_record" "k1chn-com-keybase" {
   type    = "TXT"
   ttl     = 300
   records = ["keybase-site-verification=VoTtE4BZ-4lGoH4_jOd-ZvX3IQQTDdjehHzjqc4UkaU"]
-}
-
-resource "aws_route53_record" "www-k1chn-com-a" {
-  zone_id = aws_route53_zone.k1chn-com.zone_id
-  name    = "www"
-  type    = "A"
-  ttl     = 300
-  records = ["75.119.217.253"]
 }
 
 resource "aws_acm_certificate" "k1chn-com" {
@@ -81,7 +110,13 @@ resource "aws_acm_certificate_validation" "k1chn-com" {
 
 resource "aws_cloudfront_distribution" "k1chn-com" {
   origin {
-    domain_name = aws_s3_bucket.k1chn-com.bucket_regional_domain_name
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+    domain_name = aws_s3_bucket.k1chn-com.website_endpoint
     origin_id   = "k1chn-com-origin"
   }
 
