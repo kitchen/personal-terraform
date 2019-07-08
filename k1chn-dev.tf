@@ -94,4 +94,6 @@ resource "aws_cloudfront_distribution" "dev-k1chn-com" {
     acm_certificate_arn = aws_acm_certificate.dev-k1chn-com.arn
     ssl_support_method  = "sni-only"
   }
+
+  depends_on = [aws_acm_certificate_validation.dev-k1chn-com]
 }
