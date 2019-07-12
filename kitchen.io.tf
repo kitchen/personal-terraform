@@ -89,3 +89,8 @@ resource "aws_route53_record" "www-blog-kitchen-io" {
   }
 }
 
+# s3 bucket kitchen.io
+# s3 bucket www.kitchen.io
+# s3 bucket blog.kitchen.io
+# s3 bucket www.blog.kitchen.io
+

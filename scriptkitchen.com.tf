@@ -38,3 +38,5 @@ resource "aws_route53_record" "www-scriptkitchen-com" {
   }
 }
 
+# s3 bucket scriptkitchen.com
+# s3 bucket www.scriptkitchen.com
