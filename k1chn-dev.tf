@@ -83,6 +83,9 @@ resource "aws_cloudfront_distribution" "dev-k1chn-com" {
     #   event_type = "origin-request"
     #   lambda_arn = aws_lambda_function.cloudfront-index-redirects.qualified_arn
     # }
+    min_ttl     = 0
+    max_ttl     = 30
+    default_ttl = 30
   }
 
   restrictions {
