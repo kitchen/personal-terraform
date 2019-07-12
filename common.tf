@@ -12,3 +12,8 @@ data "aws_iam_policy_document" "allow-edgelambda-to-assumerole" {
     effect = "Allow"
   }
 }
+
+locals {
+  s3_alias_target  = "s3-website-us-west-2.amazonaws.com"
+  s3_alias_zone_id = "Z3BJ6K6RIION7M"
+}

@@ -31,3 +31,61 @@ resource "aws_route53_record" "www-words-kitchen-io" {
 
   records = ["64.111.117.224"]
 }
+
+resource "aws_route53_record" "devblog-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "devblog"
+  ttl     = "300"
+  type    = "A"
+
+  records = ["75.119.217.253"]
+}
+
+resource "aws_route53_record" "kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = ""
+  type    = "A"
+
+  alias {
+    name                   = local.s3_alias_target
+    zone_id                = local.s3_alias_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "www-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "www"
+  type    = "A"
+
+  alias {
+    name                   = local.s3_alias_target
+    zone_id                = local.s3_alias_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "blog-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "blog"
+  type    = "A"
+
+  alias {
+    name                   = local.s3_alias_target
+    zone_id                = local.s3_alias_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "www-blog-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "www.blog"
+  type    = "A"
+
+  alias {
+    name                   = local.s3_alias_target
+    zone_id                = local.s3_alias_zone_id
+    evaluate_target_health = false
+  }
+}
+
