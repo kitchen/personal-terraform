@@ -127,7 +127,7 @@ resource "aws_cloudfront_distribution" "k1chn-com" {
   }
 
   # logging_config {
-  #   bucket = 
+  #   bucket =
   # }
 
   viewer_certificate {
@@ -135,5 +135,7 @@ resource "aws_cloudfront_distribution" "k1chn-com" {
     ssl_support_method  = "sni-only"
   }
 
+  # cloudfront takes *forever* to fully deploy
+  wait_for_deployment = false
   depends_on = [aws_acm_certificate_validation.k1chn-com]
 }

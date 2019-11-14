@@ -1,3 +1,37 @@
+resource "aws_s3_bucket" "dev-k1chn-com" {
+  bucket = "dev-k1chn-com"
+  acl    = "private"
+}
+
+data "aws_iam_policy_document" "s3-dev-k1chn-com-allow-cloudfront" {
+  statement {
+    actions = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.dev-k1chn-com.arn}/*"]
+
+    principals {
+      type = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.dev-k1chn-cloudfront.iam_arn]
+    }
+  }
+
+  statement {
+    actions = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.dev-k1chn-com.arn]
+
+    principals {
+      type = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.dev-k1chn-cloudfront.iam_arn]
+    }
+  }
+
+}
+
+resource "aws_s3_bucket_policy" "dev-k1chn-com-allow-cloudfront" {
+  bucket = aws_s3_bucket.dev-k1chn-com.id
+  policy = data.aws_iam_policy_document.s3-dev-k1chn-com-allow-cloudfront.json
+}
+
+
 resource "aws_route53_record" "dev-k1chn-com-a" {
   zone_id = aws_route53_zone.k1chn-com.zone_id
   name    = "dev"
@@ -50,10 +84,18 @@ resource "aws_acm_certificate_validation" "dev-k1chn-com" {
   provider                = "aws.east"
 }
 
+resource "aws_cloudfront_origin_access_identity" "dev-k1chn-cloudfront" {
+  comment = "dev.k1chn.com cloudfront origin access identity"
+}
+
 resource "aws_cloudfront_distribution" "dev-k1chn-com" {
   origin {
-    domain_name = aws_s3_bucket.k1chn-com.bucket_regional_domain_name
+    domain_name = aws_s3_bucket.dev-k1chn-com.bucket_regional_domain_name
     origin_id   = "dev-k1chn-com-origin"
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.dev-k1chn-cloudfront.cloudfront_access_identity_path
+    }
   }
 
   enabled             = true
@@ -79,10 +121,11 @@ resource "aws_cloudfront_distribution" "dev-k1chn-com" {
 
     viewer_protocol_policy = "redirect-to-https"
 
-    # lambda_function_association {
-    #   event_type = "origin-request"
-    #   lambda_arn = aws_lambda_function.cloudfront-index-redirects.qualified_arn
-    # }
+    lambda_function_association {
+      event_type = "origin-request"
+      lambda_arn = aws_lambda_function.cloudfront-index-redirects.qualified_arn
+    }
+
     min_ttl     = 0
     max_ttl     = 30
     default_ttl = 30
@@ -94,9 +137,10 @@ resource "aws_cloudfront_distribution" "dev-k1chn-com" {
     }
   }
 
-  # logging_config {
-  #   bucket = 
-  # }
+  logging_config {
+    bucket = "kitchen-logs-bucket.s3.amazonaws.com"
+    prefix = "dev.k1chn.com"
+  }
 
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate.dev-k1chn-com.arn
@@ -104,6 +148,7 @@ resource "aws_cloudfront_distribution" "dev-k1chn-com" {
   }
 
 
-
+  # cloudfront takes *forever* to fully deploy
+  wait_for_deployment = false
   depends_on = [aws_acm_certificate_validation.dev-k1chn-com]
 }

@@ -11,11 +11,7 @@ resource "aws_iam_role_policy_attachment" "lambda-index-redirects-basic-executio
 data "archive_file" "lambda-index-redirects-artifact" {
   type        = "zip"
   output_path = "lambda/cloudfront-index-redirects.zip"
-
-  source {
-    content  = "lambda/cloudfrount-index-redirects.js"
-    filename = "index.js"
-  }
+  source_file = "lambda/cloudfront-index-redirects/index.js"
 }
 
 resource "aws_lambda_function" "cloudfront-index-redirects" {
