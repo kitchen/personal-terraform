@@ -23,14 +23,12 @@ data "aws_iam_policy_document" "s3-dev-k1chn-com-allow-cloudfront" {
       identifiers = [aws_cloudfront_origin_access_identity.dev-k1chn-cloudfront.iam_arn]
     }
   }
-
 }
 
 resource "aws_s3_bucket_policy" "dev-k1chn-com-allow-cloudfront" {
   bucket = aws_s3_bucket.dev-k1chn-com.id
   policy = data.aws_iam_policy_document.s3-dev-k1chn-com-allow-cloudfront.json
 }
-
 
 resource "aws_route53_record" "dev-k1chn-com-a" {
   zone_id = aws_route53_zone.k1chn-com.zone_id

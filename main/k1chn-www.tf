@@ -1,10 +1,33 @@
 resource "aws_s3_bucket" "k1chn-com" {
   bucket = "k1chn-com"
-  acl    = "public-read"
+  acl    = "private"
+}
 
-  website {
-    index_document = "index.html"
+data "aws_iam_policy_document" "s3-k1chn-com-allow-cloudfront" {
+  statement {
+    actions = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.k1chn-com.arn}/*"]
+
+    principals {
+      type = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.k1chn-cloudfront.iam_arn]
+    }
   }
+
+  statement {
+    actions = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.k1chn-com.arn]
+
+    principals {
+      type = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.k1chn-cloudfront.iam_arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "k1chn-com-allow-cloudfront" {
+  bucket = aws_s3_bucket.k1chn-com.id
+  policy = data.aws_iam_policy_document.s3-k1chn-com-allow-cloudfront.json
 }
 
 resource "aws_route53_record" "k1chn-com-a" {
@@ -81,16 +104,18 @@ resource "aws_acm_certificate_validation" "k1chn-com" {
   provider                = "aws.east"
 }
 
+resource "aws_cloudfront_origin_access_identity" "k1chn-cloudfront" {
+  comment = "k1chn.com cloudfront origin access identity"
+}
+
 resource "aws_cloudfront_distribution" "k1chn-com" {
   origin {
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
-    }
-    domain_name = aws_s3_bucket.k1chn-com.website_endpoint
+    domain_name = aws_s3_bucket.k1chn-com.bucket_regional_domain_name
     origin_id   = "k1chn-com-origin"
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.k1chn-cloudfront.cloudfront_access_identity_path
+    }
   }
 
   enabled             = true
@@ -115,6 +140,12 @@ resource "aws_cloudfront_distribution" "k1chn-com" {
     }
 
     viewer_protocol_policy = "redirect-to-https"
+
+    lambda_function_association {
+      event_type = "origin-request"
+      lambda_arn = aws_lambda_function.cloudfront-index-redirects.qualified_arn
+    }
+
     min_ttl                = 0
     max_ttl                = 30
     default_ttl            = 30
@@ -126,9 +157,10 @@ resource "aws_cloudfront_distribution" "k1chn-com" {
     }
   }
 
-  # logging_config {
-  #   bucket =
-  # }
+  logging_config {
+    bucket = "kitchen-logs-bucket.s3.amazonaws.com"
+    prefix = "k1chn.com"
+  }
 
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate.k1chn-com.arn
