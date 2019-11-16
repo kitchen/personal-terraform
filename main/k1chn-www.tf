@@ -142,6 +142,11 @@ resource "aws_cloudfront_distribution" "k1chn-com" {
     viewer_protocol_policy = "redirect-to-https"
 
     lambda_function_association {
+      event_type = "origin-response"
+      lambda_arn = aws_lambda_function.cloudfront-add-security-headers.qualified_arn
+    }
+
+    lambda_function_association {
       event_type = "origin-request"
       lambda_arn = aws_lambda_function.cloudfront-index-redirects.qualified_arn
     }
