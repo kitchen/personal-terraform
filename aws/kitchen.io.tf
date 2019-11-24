@@ -89,8 +89,20 @@ resource "aws_route53_record" "www-blog-kitchen-io" {
   }
 }
 
+resource "aws_route53_record" "kitchen-io-caa" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "."
+  type    = "CAA"
+  ttl     = 300
+  records = [
+    "0 issue \"amazon.com\"",
+    "0 issue \"pki.goog\"",
+    "0 issue \"letsencrypt.org\"",
+    "0 iodef \"mailto:kitchen@kitchen.io\"",
+  ]
+}
+
 # s3 bucket kitchen.io
 # s3 bucket www.kitchen.io
 # s3 bucket blog.kitchen.io
 # s3 bucket www.blog.kitchen.io
-

@@ -26,3 +26,13 @@ resource "aws_route53_record" "k1chn-com-keybase" {
   records = ["keybase-site-verification=VoTtE4BZ-4lGoH4_jOd-ZvX3IQQTDdjehHzjqc4UkaU"]
 }
 
+resource "aws_route53_record" "k1chn-com-caa" {
+  zone_id = aws_route53_zone.k1chn-com.zone_id
+  name    = "."
+  type    = "CAA"
+  ttl     = 300
+  records = [
+    "0 issue \"amazon.com\"",
+    "0 iodef \"mailto:k1chn@k1chn.com\""
+  ]
+}
