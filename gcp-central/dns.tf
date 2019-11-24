@@ -4,6 +4,18 @@ resource "google_dns_managed_zone" "kitchen-horse" {
   description = "domain for GCP things ... horse"
 }
 
-output "kitchn-horse-zone-name" {
+output "kitchen-horse-zone-name" {
   value = google_dns_managed_zone.kitchen-horse.name
+}
+
+output "kitchen-horse-zone-dnsname" {
+  value = google_dns_managed_zone.kitchen-horse.dns_name
+}
+
+resource "google_dns_record_set" "kitchen-horse-keybase" {
+  name         = "_keybase.${google_dns_managed_zone.kitchen-horse.dns_name}"
+  type         = "TXT"
+  ttl          = 300
+  managed_zone = google_dns_managed_zone.kitchen-horse.name
+  rrdatas      = ["keybase-site-verification=2F_g-YHEpFqVYJ7dZD8tzxj3iJ8fJBOcdHy4JYI0emE"]
 }
