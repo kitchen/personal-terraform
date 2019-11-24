@@ -42,7 +42,19 @@ resource "google_compute_firewall" "central-allow-ssh" {
   network = google_compute_network.central.name
 
   allow {
+    # TODO: filter this so it's just from IAP IPs
     protocol = "tcp"
     ports    = ["22"]
+  }
+}
+
+resource "google_compute_firewall" "central-allow-http" {
+  name    = "central-allow-http"
+  network = google_compute_network.central.name
+
+  allow {
+    # TODO: filter this so it's just from forwarder IPs
+    protocol = "tcp"
+    ports    = ["80"]
   }
 }
