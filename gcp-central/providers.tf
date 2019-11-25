@@ -13,3 +13,7 @@ provider "google" {
 resource "google_project_service" "dns" {
   service = "dns.googleapis.com"
 }
+
+resource "google_project_service" "cloudkms" {
+  service = "cloudkms.googleapis.com"
+}
