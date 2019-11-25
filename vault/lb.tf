@@ -31,9 +31,12 @@ resource "google_compute_target_http_proxy" "vault" {
 
 # https proxy
 resource "google_compute_target_https_proxy" "vault" {
-  name             = "vault"
-  url_map          = google_compute_url_map.vault.self_link
-  ssl_certificates = [google_compute_managed_ssl_certificate.vault-kitchen-horse.self_link]
+  name    = "vault"
+  url_map = google_compute_url_map.vault.self_link
+  ssl_certificates = [
+    google_compute_managed_ssl_certificate.vault-kitchen-horse.self_link,
+    google_compute_managed_ssl_certificate.kitchen-horse.self_link
+  ]
 }
 
 resource "google_compute_global_address" "vault" {
@@ -59,7 +62,7 @@ resource "google_compute_global_forwarding_rule" "vault-https" {
 resource "google_compute_url_map" "vault" {
   name            = "vault"
   description     = "url mapping for vault"
-  default_service = google_compute_backend_service.vault-http.self_link
+  default_service = google_compute_backend_bucket.kitchen-horse-web.self_link
 
   host_rule {
     description  = "vault.kitchen.horse"
@@ -87,7 +90,7 @@ resource "google_compute_managed_ssl_certificate" "vault-kitchen-horse" {
   }
 }
 
-resource "google_dns_record_set" "kitchen-horse-keybase" {
+resource "google_dns_record_set" "kitchen-horse-vault" {
   # TODO: statefile
   project      = "central-259919"
   name         = "vault.kitchen.horse."

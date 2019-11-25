@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "0.12.13",
-  "serial": 100,
+  "serial": 95,
   "lineage": "1742f9f4-bf45-b269-b06e-488fdddd20d1",
   "outputs": {},
   "resources": [
@@ -524,33 +524,7 @@
     {
       "mode": "managed",
       "type": "google_dns_record_set",
-      "name": "kitchen-horse",
-      "provider": "provider.google",
-      "instances": [
-        {
-          "schema_version": 0,
-          "attributes": {
-            "id": "kitchen-horse/kitchen.horse./A",
-            "managed_zone": "kitchen-horse",
-            "name": "kitchen.horse.",
-            "project": "central-259919",
-            "rrdatas": [
-              "35.201.68.48"
-            ],
-            "ttl": 300,
-            "type": "A"
-          },
-          "private": "bnVsbA==",
-          "depends_on": [
-            "google_compute_global_address.vault"
-          ]
-        }
-      ]
-    },
-    {
-      "mode": "managed",
-      "type": "google_dns_record_set",
-      "name": "kitchen-horse-vault",
+      "name": "kitchen-horse-keybase",
       "provider": "provider.google",
       "instances": [
         {
@@ -674,30 +648,6 @@
             ]
           },
           "private": "bnVsbA=="
-        }
-      ]
-    },
-    {
-      "mode": "managed",
-      "type": "google_storage_bucket_iam_binding",
-      "name": "kitchen-horse-web-public",
-      "provider": "provider.google",
-      "instances": [
-        {
-          "schema_version": 0,
-          "attributes": {
-            "bucket": "kitchen-horse-web",
-            "etag": "CAI=",
-            "id": "kitchen-horse-web/roles/storage.objectViewer",
-            "members": [
-              "allUsers"
-            ],
-            "role": "roles/storage.objectViewer"
-          },
-          "private": "bnVsbA==",
-          "depends_on": [
-            "google_storage_bucket.kitchen-horse-web"
-          ]
         }
       ]
     }
