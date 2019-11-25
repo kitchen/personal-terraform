@@ -15,8 +15,10 @@ resource "google_compute_backend_service" "vault-http" {
   name          = "vault-http"
   health_checks = [google_compute_health_check.vault-http.self_link]
 
-  # TODO: IAP
-  # iap {}
+  iap {
+    oauth2_client_id     = data.google_kms_secret.vault-http-client-id.plaintext
+    oauth2_client_secret = data.google_kms_secret.vault-http-client-secret.plaintext
+  }
 
   backend {
     group = google_compute_instance_group_manager.vault.instance_group
@@ -77,6 +79,15 @@ resource "google_compute_url_map" "vault" {
   }
 }
 
+resource "google_iap_web_backend_service_iam_binding" "vault-iap-kitchen" {
+  web_backend_service = google_compute_backend_service.vault-http.name
+  role                = "roles/iap.httpsResourceAccessor"
+  members = [
+    "user:kitchen@scriptkitchen.com"
+  ]
+}
+
+
 
 # ssl certificate
 resource "google_compute_managed_ssl_certificate" "vault-kitchen-horse" {
@@ -98,4 +109,16 @@ resource "google_dns_record_set" "kitchen-horse-vault" {
   ttl          = 300
   managed_zone = "kitchen-horse"
   rrdatas      = [google_compute_global_address.vault.address]
+}
+
+data "google_kms_secret" "vault-http-client-id" {
+  # TODO: remote state
+  crypto_key = "projects/central-259919/locations/us-central1/keyRings/kitchen-secrets/cryptoKeys/secrets-key"
+  ciphertext = "CiQAB8GTs2T2Rwvhz7KdiEG/YYMW7H8MIXGESRqp8lUWB1eRvO8ScQDJydJulX3ZRbutgHo2sM9p5hOhc7Cx/R/xt9nRlLJaLe7IezW2Yfo9J22hwNdjvIIpOXZoIYscLzqO31KV98oRdFybgrkSjNbG45vm0TQ/qEhhvZdP+wP3f8eCmzlZ6I3pTuVbk8RS7VaaLSxnCrDR"
+}
+
+data "google_kms_secret" "vault-http-client-secret" {
+  # TODO: remote state
+  crypto_key = "projects/central-259919/locations/us-central1/keyRings/kitchen-secrets/cryptoKeys/secrets-key"
+  ciphertext = "CiQAB8GTs/D4bRRomZZT5oWM2Mtup0OFl1Ob6K08apfW7pQqe3sSQQDJydJuDNRkaWKqkP+uSVD3lzLbhr8ify4GFRIh4Yl6x56oJ2YgU4Biw9zZrwlJO6jaXDsQqTkd8QTB/O8SYuJ5"
 }
