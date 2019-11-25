@@ -19,10 +19,18 @@ resource "google_compute_instance_template" "vault" {
     create_before_destroy = true
   }
 
+  metadata = {
+    "user-data" = data.local_file.user-data.content
+  }
+
   service_account {
     email  = google_service_account.vault-instance.email
     scopes = []
   }
+}
+
+data "local_file" "user-data" {
+  filename = "user-data.yml"
 }
 
 resource "google_compute_instance_group_manager" "vault" {

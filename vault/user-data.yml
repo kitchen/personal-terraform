@@ -1,0 +1,24 @@
+#cloud-config
+
+write_files:
+  - path: /var/www/html/v1/sys/health
+    content: ok
+    permissions: 0644
+  - path: /usr/lib/cgi-bin/env.cgi
+    content: |
+      #!/bin/bash
+      echo "Content-Type: text/plain"
+      echo
+      env
+    permissions: 0755
+    owner: root
+
+packages:
+  - vim
+  - apache2
+  - docker.io
+  - curl
+
+runcmd:
+  - a2enmod cgi
+  - service apache2 restart
