@@ -1,7 +1,3 @@
-resource "google_storage_bucket" "kitchen-secrets" {
-  name = "kitchen-secrets"
-}
-
 resource "google_kms_key_ring" "kitchen-secrets" {
   name     = "kitchen-secrets"
   location = "us-central1"
