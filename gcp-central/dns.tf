@@ -29,7 +29,7 @@ resource "google_dns_record_set" "kitchen-horse-caa" {
   ttl          = 300
   managed_zone = "kitchen-horse"
   rrdatas = [
-    "0 issue letsencrypt.org",
-    "0 issue pki.goog"
+    "0 issue \"letsencrypt.org\"",
+    "0 issue \"pki.goog\""
   ]
 }
