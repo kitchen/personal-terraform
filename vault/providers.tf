@@ -1,3 +1,10 @@
+terraform {
+  backend "gcs" {
+    bucket = "kitchen-terraform"
+    prefix = "personal-terraform/vault"
+  }
+}
+
 provider "google" {
   project = "ssh-ca-vault"
   region  = "us-central1"
