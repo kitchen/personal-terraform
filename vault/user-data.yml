@@ -1,24 +1,31 @@
 #cloud-config
 
 write_files:
-  - path: /var/www/html/v1/sys/health
-    content: ok
-    permissions: 0644
-  - path: /usr/lib/cgi-bin/env.cgi
+  - path: /etc/vault.hcl
     content: |
-      #!/bin/bash
-      echo "Content-Type: text/plain"
-      echo
-      env
-    permissions: 0755
-    owner: root
+      listener "tcp" {
+        tls_disable = true
+        address = "0.0.0.0:8200"
+      }
+
+      seal "gcpckms" {
+        project = "ssh-ca-vault"
+        region = "us-central1"
+        key_ring = "vault"
+        crypto_key = "vault_seal"
+      }
+
+      storage "gcs" {
+        bucket = "ssh-ca-vault"
+      }
+
+      ui = true
+    permissions: 0644
 
 packages:
   - vim
-  - apache2
   - docker.io
   - curl
 
 runcmd:
-  - a2enmod cgi
-  - service apache2 restart
+  - docker run -d -v /etc/vault.hcl:/vault/config/vault.hcl -p 80:8200/tcp --name vault vault
