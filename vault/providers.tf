@@ -20,6 +20,10 @@ resource "google_project_service" "cloudkms" {
   service = "cloudkms.googleapis.com"
 }
 
+resource "google_project_service" "containerregistry" {
+  service = "containerregistry.googleapis.com"
+}
+
 resource "google_compute_project_metadata_item" "enable-oslogin" {
   key   = "enable-oslogin"
   value = "TRUE"
