@@ -12,11 +12,11 @@ resource "google_compute_backend_bucket" "kitchen-horse-web" {
   bucket_name = google_storage_bucket.kitchen-horse-web.name
 }
 
-resource "google_storage_bucket_iam_binding" "kitchen-horse-web-public" {
+resource "google_storage_bucket_iam_member" "kitchen-horse-web-public" {
   bucket = google_storage_bucket.kitchen-horse-web.name
   role   = "roles/storage.objectViewer"
 
-  members = ["allUsers"]
+  member = "allUsers"
 }
 
 resource "google_dns_record_set" "kitchen-horse" {

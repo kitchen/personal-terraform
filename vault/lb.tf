@@ -79,15 +79,11 @@ resource "google_compute_url_map" "vault" {
   }
 }
 
-resource "google_iap_web_backend_service_iam_binding" "vault-iap-kitchen" {
+resource "google_iap_web_backend_service_iam_member" "vault-iap-kitchen" {
   web_backend_service = google_compute_backend_service.vault-http.name
   role                = "roles/iap.httpsResourceAccessor"
-  members = [
-    "user:kitchen@scriptkitchen.com"
-  ]
+  member              = "user:kitchen@scriptkitchen.com"
 }
-
-
 
 # ssl certificate
 resource "google_compute_managed_ssl_certificate" "vault-kitchen-horse" {
