@@ -14,24 +14,6 @@ resource "aws_route53_record" "kitchen-io-keybase" {
   ]
 }
 
-resource "aws_route53_record" "words-kitchen-io" {
-  zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "words"
-  ttl     = "300"
-  type    = "A"
-
-  records = ["64.111.117.224"]
-}
-
-resource "aws_route53_record" "www-words-kitchen-io" {
-  zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "www.words"
-  ttl     = "300"
-  type    = "A"
-
-  records = ["64.111.117.224"]
-}
-
 resource "aws_route53_record" "devblog-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
   name    = "devblog"
@@ -106,3 +88,30 @@ resource "aws_route53_record" "kitchen-io-caa" {
 # s3 bucket www.kitchen.io
 # s3 bucket blog.kitchen.io
 # s3 bucket www.blog.kitchen.io
+
+
+# delegation to wordpress.com for wordstest.kitchen.io
+resource "aws_route53_record" "wordstest-kitchen-io-wordpress-delegation" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "wordstest"
+  type    = "NS"
+  ttl     = "300"
+  records = [
+    "ns1.wordpress.com",
+    "ns2.wordpress.com",
+    "ns3.wordpress.com",
+  ]
+}
+
+# delegation to wordpress.com for wordstest.kitchen.io
+resource "aws_route53_record" "words-kitchen-io-wordpress-delegation" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "words"
+  type    = "NS"
+  ttl     = "300"
+  records = [
+    "ns1.wordpress.com",
+    "ns2.wordpress.com",
+    "ns3.wordpress.com",
+  ]
+}
