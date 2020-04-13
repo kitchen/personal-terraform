@@ -19,15 +19,15 @@ resource "google_storage_bucket_iam_member" "kitchen-horse-web-public" {
   member = "allUsers"
 }
 
-resource "google_dns_record_set" "kitchen-horse" {
-  # TODO: statefile
-  project      = "central-259919"
-  name         = "kitchen.horse."
-  type         = "A"
-  ttl          = 300
-  managed_zone = "kitchen-horse"
-  rrdatas      = [google_compute_global_address.vault.address]
-}
+# resource "google_dns_record_set" "kitchen-horse" {
+#   # TODO: statefile
+#   project      = "central-259919"
+#   name         = "kitchen.horse."
+#   type         = "A"
+#   ttl          = 300
+#   managed_zone = "kitchen-horse"
+#   rrdatas      = [google_compute_global_address.vault.address]
+# }
 
 
 resource "google_compute_managed_ssl_certificate" "kitchen-horse" {

@@ -41,23 +41,23 @@ resource "google_compute_target_https_proxy" "vault" {
   ]
 }
 
-resource "google_compute_global_address" "vault" {
-  name = "vault"
-}
+# resource "google_compute_global_address" "vault" {
+#   name = "vault"
+# }
 
-resource "google_compute_global_forwarding_rule" "vault-http" {
-  name       = "vault-http"
-  target     = google_compute_target_http_proxy.vault.self_link
-  port_range = "80"
-  ip_address = google_compute_global_address.vault.address
-}
+# resource "google_compute_global_forwarding_rule" "vault-http" {
+#   name       = "vault-http"
+#   target     = google_compute_target_http_proxy.vault.self_link
+#   port_range = "80"
+#   ip_address = google_compute_global_address.vault.address
+# }
 
-resource "google_compute_global_forwarding_rule" "vault-https" {
-  name       = "vault-https"
-  target     = google_compute_target_https_proxy.vault.self_link
-  port_range = "443"
-  ip_address = google_compute_global_address.vault.address
-}
+# resource "google_compute_global_forwarding_rule" "vault-https" {
+#   name       = "vault-https"
+#   target     = google_compute_target_https_proxy.vault.self_link
+#   port_range = "443"
+#   ip_address = google_compute_global_address.vault.address
+# }
 
 
 # urlmap
@@ -97,15 +97,15 @@ resource "google_compute_managed_ssl_certificate" "vault-kitchen-horse" {
   }
 }
 
-resource "google_dns_record_set" "kitchen-horse-vault" {
-  # TODO: statefile
-  project      = "central-259919"
-  name         = "vault.kitchen.horse."
-  type         = "A"
-  ttl          = 300
-  managed_zone = "kitchen-horse"
-  rrdatas      = [google_compute_global_address.vault.address]
-}
+# resource "google_dns_record_set" "kitchen-horse-vault" {
+#   # TODO: statefile
+#   project      = "central-259919"
+#   name         = "vault.kitchen.horse."
+#   type         = "A"
+#   ttl          = 300
+#   managed_zone = "kitchen-horse"
+#   rrdatas      = [google_compute_global_address.vault.address]
+# }
 
 data "google_kms_secret" "vault-http-client-id" {
   # TODO: remote state
