@@ -11,7 +11,7 @@ resource "google_compute_health_check" "vault-http" {
 
 }
 
-resource "google_compute_backend_service" "vault-http" {
+resource "google_compute_region_backend_service" "vault-http" {
   name          = "vault-http"
   health_checks = [google_compute_health_check.vault-http.self_link]
 
@@ -26,45 +26,49 @@ resource "google_compute_backend_service" "vault-http" {
 }
 
 # http proxy
-resource "google_compute_target_http_proxy" "vault" {
-  name    = "vault"
-  url_map = google_compute_url_map.vault.self_link
+resource "google_compute_region_target_http_proxy" "vault" {
+  name     = "vault"
+  provider = google-beta
+  url_map  = google_compute_region_url_map.vault.self_link
 }
 
 # https proxy
-resource "google_compute_target_https_proxy" "vault" {
-  name    = "vault"
-  url_map = google_compute_url_map.vault.self_link
+resource "google_compute_region_target_https_proxy" "vault" {
+  name     = "vault"
+  provider = google-beta
+  url_map  = google_compute_region_url_map.vault.self_link
   ssl_certificates = [
     google_compute_managed_ssl_certificate.vault-kitchen-horse.self_link,
     google_compute_managed_ssl_certificate.kitchen-horse.self_link
   ]
 }
 
-# resource "google_compute_global_address" "vault" {
-#   name = "vault"
-# }
+resource "google_compute_address" "vault" {
+  name = "vault"
+}
 
-# resource "google_compute_global_forwarding_rule" "vault-http" {
-#   name       = "vault-http"
-#   target     = google_compute_target_http_proxy.vault.self_link
-#   port_range = "80"
-#   ip_address = google_compute_global_address.vault.address
-# }
+resource "google_compute_forwarding_rule" "vault-http" {
+  name       = "vault-http"
+  target     = google_compute_region_target_http_proxy.vault.self_link
+  port_range = "80"
+  ip_address = google_compute_address.vault.address
+}
 
-# resource "google_compute_global_forwarding_rule" "vault-https" {
-#   name       = "vault-https"
-#   target     = google_compute_target_https_proxy.vault.self_link
-#   port_range = "443"
-#   ip_address = google_compute_global_address.vault.address
-# }
+resource "google_compute_forwarding_rule" "vault-https" {
+  name       = "vault-https"
+  target     = google_compute_region_target_https_proxy.vault.self_link
+  port_range = "443"
+  ip_address = google_compute_address.vault.address
+}
 
 
 # urlmap
-resource "google_compute_url_map" "vault" {
-  name            = "vault"
-  description     = "url mapping for vault"
-  default_service = google_compute_backend_bucket.kitchen-horse-web.self_link
+resource "google_compute_region_url_map" "vault" {
+  name        = "vault"
+  provider    = google-beta
+  description = "url mapping for vault"
+  # default_service = google_compute_backend_bucket.kitchen-horse-web.self_link
+  default_service = google_compute_region_backend_service.vault-http.self_link
 
   host_rule {
     description  = "vault.kitchen.horse"
@@ -74,13 +78,13 @@ resource "google_compute_url_map" "vault" {
 
   path_matcher {
     name            = "allpaths"
-    default_service = google_compute_backend_service.vault-http.self_link
+    default_service = google_compute_region_backend_service.vault-http.self_link
     description     = "all paths"
   }
 }
 
 resource "google_iap_web_backend_service_iam_member" "vault-iap-kitchen" {
-  web_backend_service = google_compute_backend_service.vault-http.name
+  web_backend_service = google_compute_region_backend_service.vault-http.name
   role                = "roles/iap.httpsResourceAccessor"
   member              = "user:kitchen@scriptkitchen.com"
 }
@@ -97,15 +101,15 @@ resource "google_compute_managed_ssl_certificate" "vault-kitchen-horse" {
   }
 }
 
-# resource "google_dns_record_set" "kitchen-horse-vault" {
-#   # TODO: statefile
-#   project      = "central-259919"
-#   name         = "vault.kitchen.horse."
-#   type         = "A"
-#   ttl          = 300
-#   managed_zone = "kitchen-horse"
-#   rrdatas      = [google_compute_global_address.vault.address]
-# }
+resource "google_dns_record_set" "kitchen-horse-vault" {
+  # TODO: statefile
+  project      = "central-259919"
+  name         = "vault.kitchen.horse."
+  type         = "A"
+  ttl          = 300
+  managed_zone = "kitchen-horse"
+  rrdatas      = [google_compute_address.vault.address]
+}
 
 data "google_kms_secret" "vault-http-client-id" {
   # TODO: remote state

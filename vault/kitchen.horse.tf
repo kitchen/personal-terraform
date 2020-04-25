@@ -1,3 +1,25 @@
+# resource "google_storage_bucket" "kitchen-horse-web-us-central1" {
+#   name   = "kitchen-horse-web-us-central1"
+#   website {
+#     main_page_suffix = "index.html"
+#     not_found_page   = "index.html"
+#   }
+# }
+
+# resource "google_compute_backend_bucket" "kitchen-horse-web-us-central1" {
+#   name        = "kitchen-horse-web-us-central1"
+#   bucket_name = google_storage_bucket.kitchen-horse-web-us-central1.name
+# }
+
+# resource "google_storage_bucket_iam_member" "kitchen-horse-web-us-central1-public" {
+#   bucket = google_storage_bucket.kitchen-horse-web-us-central1.name
+#   role   = "roles/storage.objectViewer"
+
+#   member = "allUsers"
+# }
+
+
+
 resource "google_storage_bucket" "kitchen-horse-web" {
   name     = "kitchen-horse-web"
   location = "US"
