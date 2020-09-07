@@ -1,0 +1,22 @@
+---
+kind: pipeline
+type: docker
+name: kitchen's terraform
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: gcp central terraform
+    image: hashicorp/terraform:0.13.2
+    commands:
+      - pwd
+      - ls
+      - env
+      
+      
+
+
+    
+  
