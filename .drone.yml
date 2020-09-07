@@ -9,7 +9,7 @@ platform:
 
 steps:
   - name: gcp central terraform
-    image: hashicorp/terraform:0.13.2
+    image: alpine
     commands:
       - pwd
       - ls
