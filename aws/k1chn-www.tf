@@ -81,22 +81,20 @@ resource "aws_acm_certificate" "k1chn-com" {
   provider                  = "aws.east"
 }
 
-resource "aws_route53_record" "k1chn-com-cert-validation" {
-  name    = aws_acm_certificate.k1chn-com.domain_validation_options.0.resource_record_name
-  type    = aws_acm_certificate.k1chn-com.domain_validation_options.0.resource_record_type
+resource "aws_route53_record" "k1chn-com-cert-validations" {
+  for_each = {
+    for dvo in aws_acm_certificate.k1chn-com.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  name    = each.value.name
+  type    = each.value.type
   zone_id = aws_route53_zone.k1chn-com.zone_id
-  records = [aws_acm_certificate.k1chn-com.domain_validation_options.0.resource_record_value]
+  records = [each.value.record]
   ttl     = 60
 }
-
-resource "aws_route53_record" "www-k1chn-com-cert-validation" {
-  name    = aws_acm_certificate.k1chn-com.domain_validation_options.1.resource_record_name
-  type    = aws_acm_certificate.k1chn-com.domain_validation_options.1.resource_record_type
-  zone_id = aws_route53_zone.k1chn-com.zone_id
-  records = [aws_acm_certificate.k1chn-com.domain_validation_options.1.resource_record_value]
-  ttl     = 60
-}
-
 
 resource "aws_acm_certificate_validation" "k1chn-com" {
   certificate_arn         = aws_acm_certificate.k1chn-com.arn
@@ -151,9 +149,9 @@ resource "aws_cloudfront_distribution" "k1chn-com" {
       lambda_arn = aws_lambda_function.cloudfront-index-redirects.qualified_arn
     }
 
-    min_ttl                = 0
-    max_ttl                = 30
-    default_ttl            = 30
+    min_ttl     = 0
+    max_ttl     = 30
+    default_ttl = 30
   }
 
   restrictions {
@@ -174,5 +172,5 @@ resource "aws_cloudfront_distribution" "k1chn-com" {
 
   # cloudfront takes *forever* to fully deploy
   wait_for_deployment = false
-  depends_on = [aws_acm_certificate_validation.k1chn-com]
+  depends_on          = [aws_acm_certificate_validation.k1chn-com]
 }
