@@ -115,3 +115,23 @@ resource "aws_route53_record" "words-kitchen-io-wordpress-delegation" {
     "ns3.wordpress.com",
   ]
 }
+
+resource "aws_route53_record" "hamilton-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "hamilton"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.97.213.119"
+  ]
+}
+
+resource "aws_route53_record" "pohara-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "pohara"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.82.27.24"
+  ]
+}
