@@ -5,21 +5,21 @@ resource "aws_s3_bucket" "k1chn-com" {
 
 data "aws_iam_policy_document" "s3-k1chn-com-allow-cloudfront" {
   statement {
-    actions = ["s3:GetObject"]
+    actions   = ["s3:GetObject"]
     resources = ["${aws_s3_bucket.k1chn-com.arn}/*"]
 
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = [aws_cloudfront_origin_access_identity.k1chn-cloudfront.iam_arn]
     }
   }
 
   statement {
-    actions = ["s3:ListBucket"]
+    actions   = ["s3:ListBucket"]
     resources = [aws_s3_bucket.k1chn-com.arn]
 
     principals {
-      type = "AWS"
+      type        = "AWS"
       identifiers = [aws_cloudfront_origin_access_identity.k1chn-cloudfront.iam_arn]
     }
   }
