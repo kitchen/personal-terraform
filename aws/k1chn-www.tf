@@ -78,7 +78,7 @@ resource "aws_acm_certificate" "k1chn-com" {
   domain_name               = "k1chn.com"
   subject_alternative_names = ["www.k1chn.com"]
   validation_method         = "DNS"
-  provider                  = "aws.east"
+  provider                  = aws.east
 }
 
 resource "aws_route53_record" "k1chn-com-cert-validations" {
@@ -91,15 +91,15 @@ resource "aws_route53_record" "k1chn-com-cert-validations" {
   }
   name    = each.value.name
   type    = each.value.type
-  zone_id = aws_route53_zone.k1chn-com.zone_id
   records = [each.value.record]
+  zone_id = aws_route53_zone.k1chn-com.zone_id
   ttl     = 60
 }
 
 resource "aws_acm_certificate_validation" "k1chn-com" {
   certificate_arn         = aws_acm_certificate.k1chn-com.arn
-  validation_record_fqdns = [aws_route53_record.k1chn-com-cert-validation.fqdn, aws_route53_record.www-k1chn-com-cert-validation.fqdn]
-  provider                = "aws.east"
+  validation_record_fqdns = [for record in aws_route53_record.k1chn-com-cert-validations : record.fqdn]
+  provider                = aws.east
 }
 
 resource "aws_cloudfront_origin_access_identity" "k1chn-cloudfront" {

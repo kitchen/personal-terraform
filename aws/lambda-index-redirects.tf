@@ -22,7 +22,7 @@ resource "aws_lambda_function" "cloudfront-index-redirects" {
   filename         = data.archive_file.lambda-index-redirects-artifact.output_path
   handler          = "index.handler"
   source_code_hash = data.archive_file.lambda-index-redirects-artifact.output_base64sha256
-  runtime          = "nodejs8.10"
+  runtime          = "nodejs12.x"
   publish          = true
-  provider         = "aws.east"
+  provider         = aws.east
 }

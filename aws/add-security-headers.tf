@@ -22,7 +22,7 @@ resource "aws_lambda_function" "cloudfront-add-security-headers" {
   filename         = data.archive_file.lambda-add-security-headers-artifact.output_path
   handler          = "index.handler"
   source_code_hash = data.archive_file.lambda-add-security-headers-artifact.output_base64sha256
-  runtime          = "nodejs8.10"
+  runtime          = "nodejs12.x"
   publish          = true
-  provider         = "aws.east"
+  provider         = aws.east
 }
