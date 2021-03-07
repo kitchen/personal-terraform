@@ -26,15 +26,6 @@ resource "google_compute_router" "central" {
 #   router                             = google_compute_router.central.name
 # }
 
-resource "google_compute_subnetwork_iam_member" "vault-instance-central-42" {
-  # TODO: statefile
-  project    = "central-259919"
-  region     = "us-central1"
-  subnetwork = "central-42"
-  role       = "roles/compute.networkUser"
-  member     = "serviceAccount:311763859367@cloudservices.gserviceaccount.com"
-}
-
 resource "google_compute_firewall" "central-allow-ssh" {
   name    = "central-allow-ssh"
   network = google_compute_network.central.name
