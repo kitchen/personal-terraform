@@ -135,3 +135,13 @@ resource "aws_route53_record" "pohara-kitchen-io" {
     "100.82.27.24"
   ]
 }
+
+resource "aws_route53_record" "pakituhi-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "pakituhi"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.83.139.87"
+  ]
+}
