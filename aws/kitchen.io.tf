@@ -14,15 +14,6 @@ resource "aws_route53_record" "kitchen-io-keybase" {
   ]
 }
 
-resource "aws_route53_record" "devblog-kitchen-io" {
-  zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "devblog"
-  ttl     = "300"
-  type    = "A"
-
-  records = ["75.119.217.253"]
-}
-
 resource "aws_route53_record" "kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
   name    = ""
@@ -116,6 +107,7 @@ resource "aws_route53_record" "words-kitchen-io-wordpress-delegation" {
   ]
 }
 
+# the mac mini
 resource "aws_route53_record" "hamilton-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
   name    = "hamilton"
@@ -126,22 +118,47 @@ resource "aws_route53_record" "hamilton-kitchen-io" {
   ]
 }
 
-resource "aws_route53_record" "pohara-kitchen-io" {
+# laptop
+resource "aws_route53_record" "taipei-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "pohara"
+  name    = "taipei"
   type    = "A"
   ttl     = "3600"
   records = [
-    "100.82.27.24"
+    "100.97.38.104"
   ]
 }
 
-resource "aws_route53_record" "pakituhi-kitchen-io" {
+# phone
+resource "aws_route53_record" "nara-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "pakituhi"
+  name    = "nara"
   type    = "A"
   ttl     = "3600"
   records = [
-    "100.83.139.87"
+    "100.126.189.101"
   ]
 }
+
+# singapore vpn box via digitalocean
+resource "aws_route53_record" "daegu-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "daegu"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.114.121.27"
+  ]
+}
+
+# VA vpn box via dreamcompute
+resource "aws_route53_record" "doe-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "doe"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.84.18.112"
+  ]
+}
+
