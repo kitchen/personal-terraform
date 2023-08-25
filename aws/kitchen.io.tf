@@ -76,9 +76,60 @@ resource "aws_route53_record" "kitchen-io-caa" {
 }
 
 # s3 bucket kitchen.io
+resource "aws_s3_bucket" "kitchen-io" {
+  bucket = "kitchen.io"
+}
+
+resource "aws_s3_bucket_website_configuration" "kitchen-io" {
+  bucket = aws_s3_bucket.kitchen-io.id
+
+  redirect_all_requests_to {
+    host_name = "words.kitchen.io"
+    protocol = "http"
+  }
+}
+
 # s3 bucket www.kitchen.io
+resource "aws_s3_bucket" "www-kitchen-io" {
+  bucket = "www.kitchen.io"
+}
+
+resource "aws_s3_bucket_website_configuration" "www-kitchen-io" {
+  bucket = aws_s3_bucket.www-kitchen-io.id
+
+  redirect_all_requests_to {
+    host_name = "words.kitchen.io"
+    protocol = "http"
+  }
+}
+
 # s3 bucket blog.kitchen.io
+resource "aws_s3_bucket" "blog-kitchen-io" {
+  bucket = "blog.kitchen.io"
+}
+
+resource "aws_s3_bucket_website_configuration" "blog-kitchen-io" {
+  bucket = aws_s3_bucket.blog-kitchen-io.id
+
+  redirect_all_requests_to {
+    host_name = "words.kitchen.io"
+    protocol = "http"
+  }
+}
+
 # s3 bucket www.blog.kitchen.io
+resource "aws_s3_bucket" "www-blog-kitchen-io" {
+  bucket = "www.blog.kitchen.io"
+}
+
+resource "aws_s3_bucket_website_configuration" "www-blog-kitchen-io" {
+  bucket = aws_s3_bucket.www-blog-kitchen-io.id
+
+  redirect_all_requests_to {
+    host_name = "words.kitchen.io"
+    protocol = "http"
+  }
+}
 
 
 # delegation to wordpress.com for wordstest.kitchen.io
