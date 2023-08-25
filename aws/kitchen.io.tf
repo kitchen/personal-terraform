@@ -111,9 +111,20 @@ resource "aws_s3_bucket" "blog-kitchen-io" {
 resource "aws_s3_bucket_website_configuration" "blog-kitchen-io" {
   bucket = aws_s3_bucket.blog-kitchen-io.id
 
-  redirect_all_requests_to {
-    host_name = "words.kitchen.io"
-    protocol = "http"
+  index_document {
+    suffix = "index.html"
+  }
+
+  routing_rule {
+    condition {
+      key_prefix_equals = ""
+    }
+
+    redirect {
+      replace_key_with = "@kitchen"
+      host_name = "simian.rodeo"
+      protocol = "https"
+    }
   }
 }
 
@@ -125,9 +136,20 @@ resource "aws_s3_bucket" "www-blog-kitchen-io" {
 resource "aws_s3_bucket_website_configuration" "www-blog-kitchen-io" {
   bucket = aws_s3_bucket.www-blog-kitchen-io.id
 
-  redirect_all_requests_to {
-    host_name = "words.kitchen.io"
-    protocol = "http"
+  index_document {
+    suffix = "index.html"
+  }
+
+  routing_rule {
+    condition {
+      key_prefix_equals = ""
+    }
+
+    redirect {
+      replace_key_with = "@kitchen"
+      host_name = "simian.rodeo"
+      protocol = "https"
+    }
   }
 }
 
