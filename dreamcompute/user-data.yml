@@ -1,0 +1,29 @@
+#cloud-config
+timezone: America/Los_Angeles
+locale: en_US.utf8
+
+ssh_pwauth: false
+disable_root: true
+packages:
+  - zsh
+users:
+  - name: kitchen
+    gecos: Jeremy Kitchen
+    lock_passwd: true
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/zsh
+    groups:
+      - adm
+      - dialout
+      - cdrom
+      - floppy
+      - sudo
+      - audio
+      - dip
+      - video
+      - plugdev
+      - netdev
+
+    ssh_authorized_keys:
+      - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPP1SUY0xXafvoWwDuNbNqq4ut09OMGFLBkzWdgxFCCG3lfVVSDnJYG1R4WgLMhESCQkEE8K+n1LnH8AJg0n25k= kitchen@taipei.kitchen.io
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK20Mz6/MC7C9IRr5YrIwH34o2A7cUppyFMLT3k5jh9f kitchen@taipei.kitchen.io
