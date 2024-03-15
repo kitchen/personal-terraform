@@ -224,6 +224,40 @@ resource "aws_route53_record" "toyama-kitchen-io" {
   ]
 }
 
+# the 8gb rpi4
+resource "aws_route53_record" "nakashibetsu-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "nakashibetsu"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.90.198.89"
+  ]
+}
+
+# the thinkcentre
+resource "aws_route53_record" "okoppe-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "okoppe"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.105.228.27"
+  ]
+}
+
+# the new thinkcentre with nixos
+resource "aws_route53_record" "biei-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "biei"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.85.46.41"
+  ]
+}
+
+
 # phone
 resource "aws_route53_record" "kanazawa-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
