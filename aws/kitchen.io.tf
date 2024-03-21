@@ -257,6 +257,18 @@ resource "aws_route53_record" "biei-kitchen-io" {
   ]
 }
 
+# the new nuc with nixos!
+resource "aws_route53_record" "shihoro-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "shihoro"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.67.91.126"
+  ]
+}
+
+
 
 # phone
 resource "aws_route53_record" "kanazawa-kitchen-io" {
