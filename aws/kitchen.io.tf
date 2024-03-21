@@ -202,17 +202,6 @@ resource "aws_route53_record" "doe-kitchen-io" {
   ]
 }
 
-# VA dreamcompute playground box
-resource "aws_route53_record" "kushiro-kitchen-io" {
-  zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "kushiro"
-  type    = "A"
-  ttl     = "3600"
-  records = [
-    "100.115.245.62"
-  ]
-}
-
 # the mac mini
 resource "aws_route53_record" "toyama-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
