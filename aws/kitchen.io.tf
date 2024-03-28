@@ -202,17 +202,6 @@ resource "aws_route53_record" "doe-kitchen-io" {
   ]
 }
 
-# the mac mini
-resource "aws_route53_record" "toyama-kitchen-io" {
-  zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "toyama"
-  type    = "A"
-  ttl     = "3600"
-  records = [
-    "100.73.117.109"
-  ]
-}
-
 # the 8gb rpi4
 resource "aws_route53_record" "nakashibetsu-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
@@ -256,8 +245,6 @@ resource "aws_route53_record" "shihoro-kitchen-io" {
     "100.67.91.126"
   ]
 }
-
-
 
 # phone
 resource "aws_route53_record" "kanazawa-kitchen-io" {
