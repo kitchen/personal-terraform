@@ -85,7 +85,7 @@ resource "aws_s3_bucket_website_configuration" "kitchen-io" {
 
   redirect_all_requests_to {
     host_name = "words.kitchen.io"
-    protocol = "http"
+    protocol  = "http"
   }
 }
 
@@ -99,7 +99,7 @@ resource "aws_s3_bucket_website_configuration" "www-kitchen-io" {
 
   redirect_all_requests_to {
     host_name = "words.kitchen.io"
-    protocol = "http"
+    protocol  = "http"
   }
 }
 
@@ -122,8 +122,8 @@ resource "aws_s3_bucket_website_configuration" "blog-kitchen-io" {
 
     redirect {
       replace_key_with = "@kitchen"
-      host_name = "simian.rodeo"
-      protocol = "https"
+      host_name        = "simian.rodeo"
+      protocol         = "https"
     }
   }
 }
@@ -147,8 +147,8 @@ resource "aws_s3_bucket_website_configuration" "www-blog-kitchen-io" {
 
     redirect {
       replace_key_with = "@kitchen"
-      host_name = "simian.rodeo"
-      protocol = "https"
+      host_name        = "simian.rodeo"
+      protocol         = "https"
     }
   }
 }
@@ -232,17 +232,6 @@ resource "aws_route53_record" "biei-kitchen-io" {
   ttl     = "3600"
   records = [
     "100.85.46.41"
-  ]
-}
-
-# the new nuc with nixos!
-resource "aws_route53_record" "shihoro-kitchen-io" {
-  zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "shihoro"
-  type    = "A"
-  ttl     = "3600"
-  records = [
-    "100.67.91.126"
   ]
 }
 
