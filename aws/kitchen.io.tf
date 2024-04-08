@@ -235,6 +235,18 @@ resource "aws_route53_record" "biei-kitchen-io" {
   ]
 }
 
+# nixos home server thing, or at least plex server and treasure chest
+resource "aws_route53_record" "akan-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "akan"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.79.90.33"
+  ]
+}
+
+
 # phone
 resource "aws_route53_record" "kanazawa-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
