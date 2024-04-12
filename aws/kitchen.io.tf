@@ -224,17 +224,6 @@ resource "aws_route53_record" "okoppe-kitchen-io" {
   ]
 }
 
-# the new thinkcentre with nixos
-resource "aws_route53_record" "biei-kitchen-io" {
-  zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "biei"
-  type    = "A"
-  ttl     = "3600"
-  records = [
-    "100.85.46.41"
-  ]
-}
-
 # nixos home server thing, or at least plex server and treasure chest
 resource "aws_route53_record" "akan-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
@@ -246,6 +235,16 @@ resource "aws_route53_record" "akan-kitchen-io" {
   ]
 }
 
+# nixos shell box running on the nuc, replaces biei
+resource "aws_route53_record" "shihoro-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "shihoro"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.127.44.115"
+  ]
+}
 
 # phone
 resource "aws_route53_record" "kanazawa-kitchen-io" {
