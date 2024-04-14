@@ -246,6 +246,17 @@ resource "aws_route53_record" "shihoro-kitchen-io" {
   ]
 }
 
+# pihole
+resource "aws_route53_record" "shari-kitchen-io" {
+  zone_id = aws_route53_zone.kitchen-io.zone_id
+  name    = "shari"
+  type    = "A"
+  ttl     = "3600"
+  records = [
+    "100.118.138.85"
+  ]
+}
+
 # phone
 resource "aws_route53_record" "kanazawa-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
