@@ -191,14 +191,14 @@ resource "aws_route53_record" "taipei-kitchen-io" {
   ]
 }
 
-# VA vpn box via dreamcompute
-resource "aws_route53_record" "doe-kitchen-io" {
+# va vpn / pihole box via dreamcompute
+resource "aws_route53_record" "westwood-kitchen-io" {
   zone_id = aws_route53_zone.kitchen-io.zone_id
-  name    = "doe"
+  name    = "westwood"
   type    = "A"
   ttl     = "3600"
   records = [
-    "100.84.18.112"
+    "100.108.10.4"
   ]
 }
 
